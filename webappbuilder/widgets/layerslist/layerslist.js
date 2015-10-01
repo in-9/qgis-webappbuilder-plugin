@@ -287,6 +287,21 @@ ol.control.LayerSwitcher.prototype.renderPanel = function() {
         layer.setVisible(!layer.getVisible());
         $(this).checked = layer.getVisible();
     });
+    $('.base-layer-radio').on('click', function() {
+        var layername = $(this).closest('li').data('layerid');
+        var layer = findBy(map.getLayerGroup(), layername);
+        layer.setVisible(true);
+        //$(this).checked = true
+        $('.base-layer-radio').each(function(){
+            var _layername = $(this).closest('li').data('layerid');
+            if (_layername != layername){
+                var layer = findBy(map.getLayerGroup(), _layername);
+                layer.setVisible(false);
+                //$(this).checked = false
+            }
+        })
+
+    });
     $('.layer-remove').on('click', function() {
         var layername = $(this).closest('li').data('layerid');
         var layer = findBy(map.getLayerGroup(), layername);
@@ -315,12 +330,21 @@ ol.control.LayerSwitcher.prototype.buildLayerTree = function(layer, isInGroup) {
                 layer.getMaxResolution() < view.getResolution()){
             name = "<font color='#bbbbbb'>" + name + "</font>";
         }
-
-        if (layer.getVisible()){
-            div += "<input class='layer-check' type='checkbox' checked>" + name;
+        if (layer.get("type") == "base"){
+            if (layer.getVisible()){
+                div += "<input class='base-layer-radio' name='base-radio-group' type='radio' checked='checked'>" + name;
+            }
+            else{
+                div += "<input class='base-layer-radio' name='base-radio-group' type='radio'>" + name;
+            }
         }
         else{
-            div += "<input class='layer-check' type='checkbox'>" + name;
+            if (layer.getVisible()){
+                div += "<input class='layer-check' type='checkbox' checked>" + name;
+            }
+            else{
+                div += "<input class='layer-check' type='checkbox'>" + name;
+            }
         }
         if (this.showOpacity){
             div += "<input style='width:80px;' class='opacity' type='text' data-slider-value='" + layer.getOpacity().toString()
@@ -339,7 +363,7 @@ ol.control.LayerSwitcher.prototype.buildLayerTree = function(layer, isInGroup) {
         }
         if (layer.get("type") != "base" && this.allowReordering && !isInGroup){
             div += "<a title='Move up' href='#' style='padding-left:15px;' href='#'><i class='layer-move-up glyphicon glyphicon-triangle-top'></i></a>";
-            div += "<a title='Move dowm' href='#' style='padding-left:15px;' href='#'><i class='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>";
+            div += "<a title='Move down' href='#' style='padding-left:15px;' href='#'><i class='layer-move-down glyphicon glyphicon-triangle-bottom'></i></a>";
         }
         if (layer.get("isRemovable")){
             div += "<a title='Remove' href='#' style='padding-left:15px;' href='#'><i class='layer-remove glyphicon glyphicon-remove'></i></a>";

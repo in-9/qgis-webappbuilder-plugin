@@ -154,10 +154,17 @@ def writeLayersAndGroups(appdef, folder, progress):
             baseJs.append(baseLayers[b])
         elif b in baseOverlays:
             baseJs.append(baseOverlays[b])
-    baseLayer = "baseLayers = [%s];" % ",".join(baseJs)
+    if baseJs:
+        baseLayer = '''baseLayers = [new ol.layer.Tile({
+                        type: 'base',
+                        title: 'No base layer',
+                        source: new ol.source.XYZ({url:""})
+                    }),%s];''' % ",".join(baseJs)
+    else:
+        baseLayer = "baseLayers = []"
 
-
-    baseLayer += "var baseLayersGroup = new ol.layer.Group({'type': 'base', 'title': 'Base maps', layers: baseLayers});"
+    baseLayer += '''var baseLayersGroup = new ol.layer.Group({showContent: true,'type':
+                    'base-group', 'title': 'Base maps', layers: baseLayers});'''
 
     if "overviewmap" in widgets:
         overviewMapBaseLayerName = widgets["overviewmap"].parameters()["Base layer"]
@@ -188,6 +195,8 @@ def writeLayersAndGroups(appdef, folder, progress):
 
     visibility = "\n".join(["lyr_%s.setVisible(%s);" % (safeName(layer.layer.name()),
                                                 str(layer.visible).lower()) for layer in layers])
+
+    visibility += "for (var i=1;i<baseLayers.length;i++){baseLayers[i].setVisible(false)}"
 
     layersList = []
     usedGroups = []
