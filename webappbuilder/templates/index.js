@@ -8,7 +8,11 @@ closer.onclick = function() {
 };
 
 var overlayPopup = new ol.Overlay({
-  element: container
+  element: container,
+  autoPan: true,
+  autoPanAnimation: {
+    duration: 250
+  }
 });
 
 var view = new ol.View({
@@ -46,7 +50,7 @@ var popupEventTriggered = function(evt) {
         if (feature) {
             var popupDef = popupLayers[allLayers.indexOf(layer)];
             var res = map.getView().getResolution();
-            var visible = layer.getVisible() && layer.getMaxResolution() > res 
+            var visible = layer.getVisible() && layer.getMaxResolution() > res
                                             && layer.getMinResolution() < res;
             if (popupDef && visible) {
                 var featureKeys = feature.getKeys();
