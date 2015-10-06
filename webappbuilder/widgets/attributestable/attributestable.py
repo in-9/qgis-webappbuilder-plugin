@@ -7,7 +7,7 @@ class AttributesTable(WebAppWidget):
 
     def write(self, appdef, folder, app, progress):
         app.tools.append('<li><a onclick="showAttributesTable()" href="#"><i class="glyphicon glyphicon-list-alt"></i>Attributes table</a></li>')
-        app.panels.append('<div class="attributes-table"><a href="#" id="attributes-table-closer" class="attributes-table-closer">Close</a></div>')
+        app.panels.append('<div class="attributes-table"><a href="#" id="attributes-table-closer" class="attributes-table-closer">&times;</a></div>')
         self.addScript("attributestable.js", folder, app)
         self.addCss("attributestable.css", folder, app)
     def icon(self):

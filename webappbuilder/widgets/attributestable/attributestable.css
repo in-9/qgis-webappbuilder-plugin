@@ -12,11 +12,26 @@
 }
 
 .attributes-table-closer {
-    text-decoration: none;
-    position: absolute;
-    top: 10px;
-    right: 30px;
-  }
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #000000;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  text-decoration: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.attributes-table-closer:hover {
+  color: #000000;
+  text-decoration: none;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  cursor: pointer;
+}
 
 .attributes-table .table-panel{
     overflow: scroll;

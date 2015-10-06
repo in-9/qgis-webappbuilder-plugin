@@ -26,7 +26,7 @@ class ChartTool(WebAppWidget):
         app.scripts.append('<script src="./charts.js"></script>')
         app.panels.append('''<div class="chart-panel" id="chart-panel">
                         <span class="chart-panel-info" id="chart-panel-info"></span>
-                        <a href="#" id="chart-panel-closer" class="chart-panel-closer">Close</a>
+                        <a href="#" id="chart-panel-closer" class="chart-panel-closer">&times;</a>
                         <div id="chart"></div></div>''')
         chartsFilepath = os.path.join(folder, "charts.js")
         with open(chartsFilepath, "w") as f:
