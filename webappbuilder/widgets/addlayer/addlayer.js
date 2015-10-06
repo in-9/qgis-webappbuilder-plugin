@@ -2,7 +2,8 @@
 var addLayerFromFile = function(){
 
     var readFeatures = function(text, filename, color, fillColor){
-        var formats = {"geojson": new ol.format.GeoJSON(), "kml":new ol.format.KML(), "gpx":new ol.format.GPX()};
+        var formats = {"geojson": new ol.format.GeoJSON(), "json": new ol.format.GeoJSON(),
+                        "kml":new ol.format.KML(), "gpx":new ol.format.GPX()};
         var ext = filename.split('.').pop().toLowerCase();
         var format = formats[ext];
         if (format){
@@ -94,7 +95,7 @@ var addLayerFromFile = function(){
         }
         else{
             $("html").css("cursor", "default");
-            alert("Failed to load file. Unsupported format.");
+            alert("Failed to load file. Unsupported format.\nOnly GeoJSON, GPX and KML files are suported.");
         }
     };
 
@@ -118,7 +119,7 @@ var addLayerFromFile = function(){
             '<label class="col-md-4 control-label" for="new-layer-file-textbox"> File </label>'+
             '<div class="col-md-8">'  +
             '<div class="input-group">' +
-            '<input id="new-layer-file-selector" type="file" accept=".geojson, .gpx, .kml" style="display:none">' +
+            '<input id="new-layer-file-selector" type="file" style="display:none">' +
             '<input id="new-layer-file-textbox" class="form-control" type="text">' +
             '<div class="input-group-addon">'+
             '<a href="#" onclick="$(\'input[id=new-layer-file-selector]\').click();">Browse</a>' +
