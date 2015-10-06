@@ -84,6 +84,10 @@ showAttributesTable_ = function() {
         zoomTo.className = "btn btn-default";
         zoomTo.onclick = function(){
             features = sourceFromLayer(this_.currentLayer).getFeatures();
+            if (this_.selectedRowIndices.length == 0){
+                alert("No feature selected.")
+                return;
+            }
             extent = ol.extent.createEmpty();
             for (var i = 0; i < this_.selectedRowIndices.length; i++){
                 extent = ol.extent.extend(extent,
