@@ -88,6 +88,21 @@ html, body {
   cursor: pointer;
 }
 
+.popup-table{
+  width:100%;
+}
+.popup-table tbody tr:nth-child(odd) {
+   background-color: #ccc;
+}
+
+.popup-table th {
+    text-align: center;
+}
+
+.popup-table th, td {
+    padding: 6px;
+}
+
 
 
 
