@@ -4,6 +4,7 @@ ol.control.HomeButton = function(opt_options) {
 
   var button = document.createElement('button');
   button.innerHTML = '<i class="glyphicon glyphicon-home"></i>';
+  button.setAttribute('title', "Zoom to initial extent and resolution");
 
   var this_ = this;
   var goHome = function(e) {
