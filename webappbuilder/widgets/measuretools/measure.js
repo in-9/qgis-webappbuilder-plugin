@@ -28,6 +28,8 @@ measureTool = function(measureType){
             map.removeOverlay(measureTooltips[i]);
         }
         measureSource.clear();
+        var menu = document.getElementById('remove-measurements');
+        menu.className = "disabled";
         return;
     }
 
@@ -120,6 +122,8 @@ measureTool = function(measureType){
       });
       measureTooltips.push(measureTooltip);
       map.addOverlay(measureTooltip);
+      var menu = document.getElementById('remove-measurements');
+      menu.className = "";
     };
 
     var formatLength = function(line) {

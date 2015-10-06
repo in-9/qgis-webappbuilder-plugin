@@ -10,7 +10,7 @@ class MeasureTools(WebAppWidget):
                             <ul class="dropdown-menu">
                               <li><a onclick="measureTool('distance')" href="#">Distance</a></li>
                               <li><a onclick="measureTool('area')" href="#">Area</a></li>
-                              <li><a onclick="measureTool(null)" href="#">Remove measurements</a></li>
+                              <li id="remove-measurements" class="disabled"><a onclick="measureTool(null)" href="#">Remove measurements</a></li>
                             </ul>
                           </li>''')
         self.addScript("measure.js", folder, app)
