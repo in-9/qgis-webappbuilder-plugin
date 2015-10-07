@@ -228,6 +228,14 @@ showAttributesTable_ = function() {
     this.rowClicked = function(idx, row){
         var layerFeatures = sourceFromLayer(this.currentLayer).getFeatures();
         if (window.event.shiftKey && this_.lastSelectedRow){
+            var sel = window.getSelection ? window.getSelection() : document.selection;
+            if (sel) {
+                if (sel.removeAllRanges) {
+                    sel.removeAllRanges();
+                } else if (sel.empty) {
+                    sel.empty();
+                }
+            }
             selFeatures = [];
             var min = Math.min(idx, this_.lastSelectedRow);
             var max = Math.max(idx, this_.lastSelectedRow);
@@ -236,6 +244,7 @@ showAttributesTable_ = function() {
             }
             selectionManager.clearSelection(this.currentLayer);
             selectionManager.addToSelection(selFeatures, this.currentLayer);
+
         }
         else if (window.event.ctrlKey){
             var feature = layerFeatures[idx - 1];
