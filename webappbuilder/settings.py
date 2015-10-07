@@ -94,10 +94,12 @@ defaultAppSettings = {
                 "Group base layers": True,
                 "Minify JavaScript": False}
 
-
+currentTheme = "basic"
+currentCss = themes[currentTheme]
 
 def initialize():
     global currentCss
+    global currentTheme
     global appSettings
     for w in webAppWidgets.values():
         w.resetParameters()
