@@ -9,10 +9,6 @@ closer.onclick = function() {
 
 var overlayPopup = new ol.Overlay({
   element: container,
-  autoPan: true,
-  autoPanAnimation: {
-    duration: 250
-  }
 });
 
 var view = new ol.View({
@@ -37,8 +33,6 @@ map.getView().fit(originalExtent, map.getSize());
 
 @POSTMAP@
 
-@POPUPLAYERS@
-
 var popupEventTriggered = function(evt) {
     var pixel = map.getEventPixel(evt.originalEvent);
     var coord = evt.coordinate;
@@ -48,7 +42,7 @@ var popupEventTriggered = function(evt) {
     map.forEachFeatureAtPixel(pixel, function(feature, layer) {
         feature = decluster(feature);
         if (feature) {
-            var popupDef = popupLayers[allLayers.indexOf(layer)];
+            var popupDef = layer.get("popup");
             var res = map.getView().getResolution();
             var visible = layer.getVisible() && layer.getMaxResolution() > res
                                             && layer.getMinResolution() < res;
@@ -83,7 +77,7 @@ var popupEventTriggered = function(evt) {
         for (var i = 0; i < len; i++) {
             var layer = allLayers[i];
             if (layer.getSource() instanceof ol.source.TileWMS) {
-                var popupDef = popupLayers[allLayers.indexOf(layer)];
+                var popupDef = layer.get("popup");
                 if (popupDef == "#AllAttributes") {
                     var url = layer.getSource().getGetFeatureInfoUrl(
                         evt.coordinate,

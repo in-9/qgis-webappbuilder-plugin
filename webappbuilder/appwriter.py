@@ -54,7 +54,6 @@ def writeWebApp(appdef, folder, writeLayersData, progress):
 
 def writeJs(appdef, folder, app, progress):
     layers = appdef["Layers"]
-    popupLayers = "popupLayers = [%s];" % ",".join(["`%s`" % layer.popup for layer in layers])
     viewCrs = appdef["Settings"]["App view CRS"]
     mapbounds = bounds(appdef["Settings"]["Extent"] == "Canvas extent", layers, viewCrs)
     mapextent = "extent: %s" % mapbounds if appdef["Settings"]["Restrict to extent"] else "center:[0,0],zoom:7"
@@ -65,7 +64,6 @@ def writeJs(appdef, folder, app, progress):
     view = "%s, maxZoom: %d, minZoom: %d, projection: '%s'" % (mapextent, maxZoom, minZoom, viewCrs)
     values = {"@BOUNDS@": mapbounds,
                 "@CONTROLS@": ",\n".join(app.controls),
-                "@POPUPLAYERS@": popupLayers,
                 "@VIEW@": view,
                 "@POINTZOOM@": pointZoom,
                 "@POPUPEVENT@": popupEvent,
