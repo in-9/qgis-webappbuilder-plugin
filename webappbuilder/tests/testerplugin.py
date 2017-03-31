@@ -6,6 +6,7 @@
 import unittest
 import webbrowser
 import os
+import shutil
 import settingstest
 import widgetstest
 import appdefvaliditytest
@@ -36,7 +37,7 @@ def functionalTests():
         from qgistester.utils import layerFromName
     except:
         return []
-
+    """
     def _createWebApp(n, checkApp=False, preview=True):
         global webAppFolder
         webAppFolder = createAppFromTestAppdef(n, checkApp, preview)
@@ -199,12 +200,38 @@ def functionalTests():
                                 'Check that Connect is logged showing EnterpriseTestDesktop@boundlessgeo.com in the bottom',
                         prestep=lambda: _startConectPlugin(), isVerifyStep=True)
     stopCompilationTest.addStep("Open WAB", lambda: openWAB())
-    stopCompilationTest.addStep("Create an EMPTY app and start compilation, then click on next step!")
-    stopCompilationTest.addStep("Verify if stop button is set", lambda: checkStartoStopButton(text='Stop') )
-    stopCompilationTest.addStep("Click stop", lambda: clickStopButton(after=1000) )
-    stopCompilationTest.addStep("Verify if StartApp button is set", lambda: checkStartoStopButton(text='CreateApp (Beta)') )
+    stopCompilationTest.addStep("Create an EMPTY app and start compilation, then click on next step!", isVerifyStep=True)
     stopCompilationTest.setCleanup(closeWAB)
     tests.append(stopCompilationTest)
+    """
+
+    # test wrongCompilationTest
+    def writeJsx(appdef, folder, app, progress):
+        # error generator jfx
+        errorGeneratorJfxFilepath = os.path.join(os.path.dirname(__file__), "data", "error_generator_app.jsx")
+
+        # where to create jsx
+        jsxFilepath = os.path.join(folder, "app.jsx")
+
+        print "moooooooooooooooooooooooooooooocked", errorGeneratorJfxFilepath, jsxFilepath
+        shutil.copyfile(errorGeneratorJfxFilepath, jsxFilepath)
+
+    def mockWriteJsx():
+        import webappbuilder
+        webappbuilder.appwriter.writeJsx = writeJsx
+
+    wrongCompilationTest = Test("Verfiy wrong compilation message from server")
+    wrongCompilationTest.addStep("Reset project", iface.newProject)
+    from boundlessconnect.tests.testerplugin import _startConectPlugin
+    wrongCompilationTest.addStep('Enter EnterpriseTestDesktop Connect credentials and accept dialog by pressing "Login" button.\n'
+                                'Check that Connect is logged showing EnterpriseTestDesktop@boundlessgeo.com in the bottom',
+                        prestep=lambda: _startConectPlugin(), isVerifyStep=True)
+    wrongCompilationTest.addStep("Open WAB", lambda: openWAB())
+    wrongCompilationTest.addStep("Create an EMPTY app and start compilation, then click on next step!", prestep=mockWriteJsx, isVerifyStep=True)
+    wrongCompilationTest.setCleanup(closeWAB)
+
+    tests = []
+    tests.append(wrongCompilationTest)
 
     return tests
 
