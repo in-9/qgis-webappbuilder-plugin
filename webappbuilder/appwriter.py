@@ -22,19 +22,19 @@ from collections import OrderedDict
 import jsbeautifier
 from operator import attrgetter
 from qgis.utils import plugins_metadata_parser
-from asyncnetworkccessmanager import AsyncNetworkAccessManager, RequestsExceptionUserAbort
 from requests.packages.urllib3.filepost import encode_multipart_formdata
 from qgiscommons.files import tempFilenameInTempFolder
 from qgiscommons.settings import pluginSetting
+from qgiscommons.networkaccessmanager import NetworkAccessManager, RequestsExceptionUserAbort
 from webbappwidget import WebAppWidget
 
-__anam = None # AsycnNetworkAccessmanager instance
+__nam = None # NetworkAccessmanager instance
 def stopWritingWebApp():
-    global __anam
-    if __anam:
-        __anam.abort()
-        del __anam
-        __anam = None
+    global __nam
+    if __nam:
+        __nam.abort()
+        del __nam
+        __nam = None
 
 # global var to count how many time PermissionDenied received => can be due to
 # token renewal
@@ -171,7 +171,7 @@ def manageFinished(netManager, zipFileName, folder, progress):
         return
 
     with open(zipFileName, 'wb') as newZipContent:
-        newZipContent.write( result.text )
+        newZipContent.write( result.content )
 
     # unzip new content as new compiled web appdef
     try:
@@ -235,13 +235,13 @@ def appSDKification(folder, progress):
     # do http post
     progress.setText("Wait compilation")
 
-    global __anam
-    if __anam:
-        del __anam
-        __anam = None
-    __anam = AsyncNetworkAccessManager(debug=True)
-    __anam.request(utils.wabCompilerUrl(), method='POST', body=payload, headers=headers, blocking=False)
-    __anam.reply.finished.connect( lambda: manageFinished(__anam, zipFileName, folder, progress) )
+    global __nam
+    if __nam:
+        del __nam
+        __nam = None
+    __nam = NetworkAccessManager(debug=True)
+    __nam.request(utils.wabCompilerUrl(), method='POST', body=payload, headers=headers, blocking=False)
+    __nam.reply.finished.connect( lambda: manageFinished(__nam, zipFileName, folder, progress) )
 
 def writeJs(appdef, folder, app, progress):
     layers = appdef["Layers"]
