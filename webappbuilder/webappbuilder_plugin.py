@@ -16,24 +16,26 @@ from webappbuilder.maindialog import MainDialog
 from webappbuilder.appcreator import loadAppdef
 from webappbuilder.settings import initialize
 from qgiscommons.files import removeTempFolder
-
 from qgiscommons.settings import addSettingsMenu, removeSettingsMenu, readSettings, pluginSetting
+from webappbuilder.processingprovider.provider import WABProvider
+from processing.core.Processing import Processing
 
 class WebAppBuilderPlugin:
 
     def __init__(self, iface):
         self.iface = iface
+        self.provider = WABProvider()
+        Processing.addProvider(self.provider)
         try:
             from webappbuilder.tests import testerplugin
             from qgistester.tests import addTestModule
             addTestModule(testerplugin, "Web App Builder")
         except:
-            import traceback
-            traceback.print_exc()
             pass
         readSettings()
 
     def initGui(self):
+        Processing.addProvider(self.provider)
         icon = QIcon(os.path.dirname(__file__) + "/icons/sdk.svg")
         self.action = QAction(icon, "Web App Builder", self.iface.mainWindow())
         self.action.setObjectName("startWebAppBuilder")
@@ -51,6 +53,7 @@ class WebAppBuilderPlugin:
         addSettingsMenu("Web App Builder", self.iface.addPluginToWebMenu)
 
     def unload(self):
+        Processing.removeProvider(self.provider)
         self.iface.removeWebToolBarIcon(self.action)
         self.iface.removePluginWebMenu("Web App Builder", self.action)
         self.iface.removePluginWebMenu("Web App Builder", self.helpAction)
